@@ -340,8 +340,14 @@
             font-weight: 600;
             margin-top: 30px;
             opacity: 0;
-            animation: bounceIn 0.8s ease forwards;
+            transition: opacity 0.5s ease;
         }
+        
+        .success-message.show {
+            opacity: 1;
+            animation: bounceIn 0.8s ease;
+        }
+
 
         .hidden {
             display: none !important;
@@ -672,7 +678,9 @@
             document.getElementById('gifContainer').classList.add('celebration');
         
             // Show success message (this was already in your code)
-            document.getElementById('successMessage').classList.remove('hidden');
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.remove('hidden');
+            successMessage.classList.add('show');
         
             // Hide Yes button
             document.getElementById('yesBtn').classList.add('hidden');
