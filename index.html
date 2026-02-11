@@ -657,29 +657,34 @@
 
         // Yes button handler
         function handleYes() {
-            // Hide no button and back button
+            // Hide the question text
+            document.getElementById('question').classList.add('hidden');
+        
+            // Hide No button and Back button
             noBtn.classList.add('hidden');
             document.getElementById('backButton4').classList.add('hidden');
-            
+        
             // Change GIF to celebration
             const mainGif = document.getElementById('mainGif');
             mainGif.src = 'hemasagar.gif'; // Celebration GIF
-            
-            // Add celebration class to container
+        
+            // Add celebration class
             document.getElementById('gifContainer').classList.add('celebration');
-            
-            // Show success message
+        
+            // Show success message (this was already in your code)
             document.getElementById('successMessage').classList.remove('hidden');
-            
-            // Hide yes button
+        
+            // Hide Yes button
             document.getElementById('yesBtn').classList.add('hidden');
-            
+        
             // Create confetti
             createConfetti();
-            
-            // Change background to more vibrant
-            document.body.style.background = 'linear-gradient(135deg, #ffe0ee 0%, #ffd4e5 50%, #ffebf3 100%)';
+        
+            // Change background
+            document.body.style.background =
+                'linear-gradient(135deg, #ffe0ee 0%, #ffd4e5 50%, #ffebf3 100%)';
         }
+
 
         // Confetti effect
         function createConfetti() {
