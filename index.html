@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day Quiz 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff5f7 50%, #ffffff 100%);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts background animation */
+        .heart-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.3;
+            animation: float-up 10s infinite ease-in;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main container */
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Page styling */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Georgia', serif;
+            font-size: clamp(28px, 5vw, 42px);
+            color: #d4849d;
+            margin-bottom: 40px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+        }
+
+        h2 {
+            font-family: 'Georgia', serif;
+            font-size: clamp(24px, 4vw, 36px);
+            color: #d4849d;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: #a67889;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        /* GIF container */
+        .gif-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 40px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(212, 132, 157, 0.2);
+            transition: all 0.5s ease;
+        }
+
+        .gif-container.celebration {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(212, 132, 157, 0.3);
+        }
+
+        .gif-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Buttons */
+        .button {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            background: linear-gradient(135deg, #e8b4c8 0%, #d4849d 100%);
+            color: white;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(212, 132, 157, 0.3);
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button.secondary {
+            background: #f0f0f0;
+            color: #888;
+        }
+
+        .button.secondary:hover {
+            background: #e8e8e8;
+        }
+
+        /* Navigation buttons */
+        .nav-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Multiple choice buttons */
+        .choice-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .choice-button {
+            padding: 18px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border: 2px solid #d4849d;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #d4849d;
+        }
+
+        .choice-button:hover:not(:disabled) {
+            background: #ffeef8;
+            transform: translateX(5px);
+        }
+
+        .choice-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Text input */
+        .text-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 18px 25px;
+            font-size: 18px;
+            border: 2px solid #e8b4c8;
+            border-radius: 15px;
+            margin: 20px auto;
+            display: block;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #d4849d;
+            box-shadow: 0 0 0 3px rgba(212, 132, 157, 0.1);
+        }
+
+        /* Feedback messages */
+        .feedback {
+            margin-top: 20px;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feedback.show {
+            opacity: 1;
+            animation: bounceIn 0.5s ease;
+        }
+
+        .feedback.wrong {
+            background: #ffe0e0;
+            color: #c44569;
+        }
+
+        .feedback.correct {
+            background: #e0ffe0;
+            color: #4caf50;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Page 4 specific styles (Valentine proposal) */
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            position: relative;
+            min-height: 120px;
+            align-items: center;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #e8b4c8 0%, #d4849d 100%);
+            color: white;
+            animation: pulse 2s infinite;
+            padding: 18px 50px;
+            font-size: 20px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(212, 132, 157, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 25px rgba(212, 132, 157, 0.5);
+            }
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(212, 132, 157, 0.4);
+        }
+
+        .no-btn {
+            background: #f0f0f0;
+            color: #888;
+            position: absolute;
+            transition: all 0.2s ease;
+            padding: 18px 50px;
+            font-size: 20px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .no-btn:hover {
+            background: #e8e8e8;
+        }
+
+        .success-message {
+            font-size: clamp(24px, 4vw, 36px);
+            color: #d4849d;
+            font-weight: 600;
+            margin-top: 30px;
+            opacity: 0;
+            animation: bounceIn 0.8s ease forwards;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Progress indicator */
+        .progress {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e8b4c8;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            opacity: 1;
+            transform: scale(1.3);
+        }
+
+        /* Confetti effect */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #d4849d;
+            position: absolute;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .buttons-container {
+                flex-direction: column;
+                gap: 15px;
+                min-height: 160px;
+            }
+
+            .button {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+
+            .yes-btn, .no-btn {
+                padding: 15px 40px;
+                font-size: 18px;
+            }
+
+            .no-btn {
+                position: absolute;
+            }
+
+            .choice-button {
+                padding: 15px 25px;
+                font-size: 16px;
+            }
+
+            .text-input {
+                font-size: 16px;
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="heart-container" id="heartContainer"></div>
+
+    <div class="container">
+        <!-- Progress indicator -->
+        <div class="progress">
+            <div class="progress-dot" id="dot1"></div>
+            <div class="progress-dot" id="dot2"></div>
+            <div class="progress-dot" id="dot3"></div>
+            <div class="progress-dot" id="dot4"></div>
+        </div>
+
+        <!-- PAGE 1: Introduction -->
+        <div class="page active" id="page1">
+            <h1>Maa.. Here's a little Valentine's Day quiz for you 💕</h1>
+            <p class="subtitle">Are you ready?</p>
+            <div class="nav-buttons">
+                <button class="button" onclick="goToPage(2)">Next</button>
+            </div>
+        </div>
+
+        <!-- PAGE 2: Multiple Choice Question -->
+        <div class="page" id="page2">
+            <h2>Who loves you the most?</h2>
+            <div class="choice-buttons">
+                <button class="choice-button" onclick="checkMultipleChoice('Sagar')">Sagar</button>
+                <button class="choice-button" onclick="checkMultipleChoice('Lily')">Lily</button>
+                <button class="choice-button" onclick="checkMultipleChoice('Aaryan')">Aaryan</button>
+            </div>
+            <div class="feedback" id="feedback2"></div>
+            <div class="nav-buttons">
+                <button class="button secondary" onclick="goToPage(1)">Back</button>
+            </div>
+        </div>
+
+        <!-- PAGE 3: Text Input Question -->
+        <div class="page" id="page3">
+            <h2>Ee prapancham lo andari kante evarante neeku ekkva ishtam?</h2>
+            <input type="text" class="text-input" id="textAnswer" placeholder="Type your answer...">
+            <div class="feedback" id="feedback3"></div>
+            <div class="nav-buttons">
+                <button class="button secondary" onclick="goToPage(2)">Back</button>
+                <button class="button" onclick="checkTextAnswer()">Submit</button>
+            </div>
+        </div>
+
+        <!-- PAGE 4: Valentine Proposal -->
+        <div class="page" id="page4">
+            <h1 id="question">Will you be my Valentine?</h1>
+            
+            <div class="gif-container" id="gifContainer">
+                <!-- Pleading puppy GIF -->
+                <img id="mainGif" src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="Pleading puppy">
+            </div>
+
+            <div class="buttons-container" id="buttonsContainer">
+                <button class="yes-btn" id="yesBtn" onclick="handleYes()">Yes! 💕</button>
+                <button class="no-btn" id="noBtn">No</button>
+            </div>
+
+            <div class="success-message hidden" id="successMessage">
+                Yay! Best Valentine's Day Ever! 💕
+            </div>
+            
+            <div class="nav-buttons" id="backButton4">
+                <button class="button secondary" onclick="goToPage(3)">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+
+        // Create floating hearts
+        function createFloatingHearts() {
+            const container = document.getElementById('heartContainer');
+            const heartSymbols = ['💕', '💖', '💗', '💝'];
+            
+            for (let i = 0; i < 6; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.animationDuration = (8 + Math.random() * 4) + 's';
+                container.appendChild(heart);
+            }
+        }
+
+        // Update progress dots
+        function updateProgress(pageNum) {
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById(`dot${i}`);
+                if (i === pageNum) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            }
+        }
+
+        // Navigate to page
+        function goToPage(pageNum) {
+            // Hide all pages
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`page${i}`).classList.remove('active');
+            }
+            
+            // Show target page
+            document.getElementById(`page${pageNum}`).classList.add('active');
+            currentPage = pageNum;
+            updateProgress(pageNum);
+            
+            // Initialize page 4 if needed
+            if (pageNum === 4) {
+                initializePage4();
+            }
+        }
+
+        // PAGE 2: Multiple Choice Logic
+        function checkMultipleChoice(answer) {
+            const buttons = document.querySelectorAll('.choice-button');
+            const feedback = document.getElementById('feedback2');
+            
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+            
+            // Show wrong feedback
+            feedback.textContent = '❌ Wrong! Answer: Everyone';
+            feedback.className = 'feedback wrong show';
+            
+            // Auto-advance after 2 seconds
+            setTimeout(() => {
+                goToPage(3);
+                // Reset for next time
+                buttons.forEach(btn => btn.disabled = false);
+                feedback.className = 'feedback';
+            }, 2000);
+        }
+
+        // PAGE 3: Text Input Logic
+        function checkTextAnswer() {
+            const input = document.getElementById('textAnswer');
+            const answer = input.value.trim().toLowerCase();
+            const feedback = document.getElementById('feedback3');
+            
+            // Accepted answers (case-insensitive)
+            const correctAnswers = ['sagar', 'maa', 'you'];
+            
+            if (correctAnswers.includes(answer)) {
+                // Correct answer
+                feedback.textContent = '✅ Correct! 💕';
+                feedback.className = 'feedback correct show';
+                
+                // Auto-advance after 2 seconds
+                setTimeout(() => {
+                    goToPage(4);
+                    // Reset for next time
+                    input.value = '';
+                    feedback.className = 'feedback';
+                }, 2000);
+            } else {
+                // Wrong answer
+                feedback.textContent = '❌ Wrong! Correct Answer: Sagar';
+                feedback.className = 'feedback wrong show';
+                
+                // Auto-advance after 2 seconds
+                setTimeout(() => {
+                    goToPage(4);
+                    // Reset for next time
+                    input.value = '';
+                    feedback.className = 'feedback';
+                }, 2000);
+            }
+        }
+
+        // Handle Enter key on text input
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('textAnswer');
+            textInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkTextAnswer();
+                }
+            });
+        });
+
+        // PAGE 4: Valentine Proposal Logic
+        const noBtn = document.getElementById('noBtn');
+        const buttonsContainer = document.getElementById('buttonsContainer');
+        let attemptCount = 0;
+        let page4Initialized = false;
+
+        function initializePage4() {
+            if (!page4Initialized) {
+                moveNoButton();
+                page4Initialized = true;
+            }
+        }
+
+        function moveNoButton() {
+            attemptCount++;
+            
+            // Get container dimensions
+            const containerRect = buttonsContainer.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            // Calculate available space
+            const maxX = containerRect.width - btnRect.width;
+            const maxY = containerRect.height - btnRect.height;
+            
+            // Generate random position with padding from edges
+            const padding = 20;
+            const randomX = padding + Math.random() * (maxX - padding * 2);
+            const randomY = padding + Math.random() * (maxY - padding * 2);
+            
+            // Apply new position
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            // Make it faster after more attempts
+            if (attemptCount > 3) {
+                noBtn.style.transition = 'all 0.1s ease';
+            }
+        }
+
+        // Mouse hover handler
+        noBtn.addEventListener('mouseenter', moveNoButton);
+        
+        // Touch handler for mobile
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        // Yes button handler
+        function handleYes() {
+            // Hide no button and back button
+            noBtn.classList.add('hidden');
+            document.getElementById('backButton4').classList.add('hidden');
+            
+            // Change GIF to celebration
+            const mainGif = document.getElementById('mainGif');
+            mainGif.src = 'https://media.giphy.com/media/g9582DNuQppxC/giphy.gif'; // Celebration GIF
+            
+            // Add celebration class to container
+            document.getElementById('gifContainer').classList.add('celebration');
+            
+            // Show success message
+            document.getElementById('successMessage').classList.remove('hidden');
+            
+            // Hide yes button
+            document.getElementById('yesBtn').classList.add('hidden');
+            
+            // Create confetti
+            createConfetti();
+            
+            // Change background to more vibrant
+            document.body.style.background = 'linear-gradient(135deg, #ffe0ee 0%, #ffd4e5 50%, #ffebf3 100%)';
+        }
+
+        // Confetti effect
+        function createConfetti() {
+            const colors = ['#d4849d', '#e8b4c8', '#ffc0d3', '#ff9ec4', '#e8a5b8'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+
+        // Initialize
+        createFloatingHearts();
+        updateProgress(1);
+    </script>
+</body>
+</html>
